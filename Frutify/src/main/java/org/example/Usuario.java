@@ -1,3 +1,5 @@
+package org.example;
+
 import java.util.*;
 
 public class Usuario {
@@ -5,7 +7,7 @@ public class Usuario {
 	Collection<Playlist> suPlaylist;
 	Collection<Cancion> favoritos;
 	private String nombre;
-	private String contraseña;
+	private String contrasena;
 
 	public void iniciarSesion() {
 		// TODO - implement Usuario.iniciarSesion
