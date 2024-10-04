@@ -10,4 +10,7 @@ public class Cancion {
 	private Date fechaLanzamiento;
 	private String nombre;
 
+	public String getNombre() {
+		return nombre;
+	}
 }
