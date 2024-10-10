@@ -23,14 +23,4 @@ public class Usuario {
 		return this.contrasena.equals(contrasena);
 	}
 
-	public void crearPlaylist() {
-		// TODO - implement Usuario.crearPlaylist
-		throw new UnsupportedOperationException();
-	}
-
-	public void agregarFavoritos() {
-		// TODO - implement Usuario.agregarFavoritos
-		throw new UnsupportedOperationException();
-	}
-
 }
