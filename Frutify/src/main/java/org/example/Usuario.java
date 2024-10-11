@@ -4,24 +4,23 @@ import java.util.*;
 
 public class Usuario {
 
-	Collection<Playlist> suPlaylist;
-	Collection<Cancion> favoritos;
 	private String nombre;
 	private String contrasena;
 
-	public void iniciarSesion() {
-		// TODO - implement Usuario.iniciarSesion
-		throw new UnsupportedOperationException();
+	public Usuario(String nombre, String contrasena) {
+		this.nombre = nombre;
+		this.contrasena = contrasena;
 	}
 
-	public void crearPlaylist() {
-		// TODO - implement Usuario.crearPlaylist
-		throw new UnsupportedOperationException();
+	public String getNombre() {
+		return nombre;
 	}
 
-	public void agregarFavoritos() {
-		// TODO - implement Usuario.agregarFavoritos
-		throw new UnsupportedOperationException();
+	public String getContrasena() {
+		return contrasena;
+	}
+	public boolean verificarContrasena(String contrasena) {
+		return this.contrasena.equals(contrasena);
 	}
 
 }
