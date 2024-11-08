@@ -17,9 +17,9 @@ import java.util.List;
  */
 public class Reproductor {
 	private Player player;
-	private Cancion cancion;
-	private List<String> listaCancion;
-	private int indice;
+	public Cancion cancion;
+	public List<String> listaCancion;
+	public int indice;
 	private boolean isPaused;
 
 	/**
