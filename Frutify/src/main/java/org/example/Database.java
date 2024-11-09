@@ -60,21 +60,49 @@ public class Database {
      * @return Un objeto {@code Usuario} si las credenciales son correctas; {@code null} en caso contrario.
      * @throws SQLException si ocurre un error al intentar ejecutar la consulta de autenticación.
      */
-    public Usuario iniciarSesion(String nombre, String contrasena){
-        String sql = "Select nombre, contrasena from usuario where nombre = ? and contrasena = ?";
-        try(PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setString(1,nombre);
-            statement.setString(2,contrasena);
-            try(ResultSet resultSet = statement.executeQuery()){
-                if(resultSet.next()){
-                    System.out.println("Inicio Exitoso");
-                    return new Usuario(nombre,contrasena);
-                }else {
-                    System.out.println("Usuario o contraseña incorrecto");
-                }
+    public Usuario iniciarSesion(String nombre, String contrasena) {
+        ResultSet resultSet = ejecutarConsultaAutenticacion(nombre, contrasena);
+        return procesarResultadoAutenticacion(resultSet, nombre, contrasena);
+    }
+
+    /**
+     * Ejecuta la consulta para autenticar al usuario con el nombre y la contraseña proporcionados.
+     *
+     * @param nombre El nombre del usuario.
+     * @param contrasena La contraseña del usuario.
+     * @return Un {@code ResultSet} que contiene los resultados de la consulta.
+     */
+    private ResultSet ejecutarConsultaAutenticacion(String nombre, String contrasena) {
+        String sql = "SELECT nombre, contrasena FROM usuario WHERE nombre = ? AND contrasena = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, nombre);
+            statement.setString(2, contrasena);
+            return statement.executeQuery();
+        } catch (SQLException e) {
+            System.out.println("Error al iniciar sesión: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Procesa el resultado de la consulta de autenticación.
+     *
+     * @param resultSet El {@code ResultSet} devuelto por la consulta.
+     * @param nombre El nombre del usuario.
+     * @param contrasena La contraseña del usuario.
+     * @return Un objeto {@code Usuario} si las credenciales son correctas; {@code null} en caso contrario.
+     */
+    private Usuario procesarResultadoAutenticacion(ResultSet resultSet, String nombre, String contrasena) {
+        try {
+            if (resultSet != null && resultSet.next()) {
+                System.out.println("Inicio Exitoso");
+                return new Usuario(nombre, contrasena);
+            } else {
+                System.out.println("Usuario o contraseña incorrecto");
             }
-        }catch (SQLException e){
-            System.out.println("Error al iniciar sesion: "+e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("Error al procesar el resultado: " + e.getMessage());
         }
         return null;
     }
@@ -90,7 +118,7 @@ public class Database {
         String sql = "Insert into playlist (nombre, usuario) values (?,?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)){
             int usuario_id = getUsuarioID(usuario.getNombre());
-            if(usuario_id == -1){
+            if(usuario_id != -1){
                 statement.setString(1,nombre);
                 statement.setInt(2,usuario_id);
                 statement.executeUpdate();
@@ -110,7 +138,7 @@ public class Database {
      * @return El ID del usuario si se encuentra; {@code -1} si no se encuentra o si ocurre un error.
      * @throws SQLException si ocurre un error al intentar recuperar el ID del usuario.
      */
-    private int getUsuarioID(String nombre){
+    public int getUsuarioID(String nombre){
         String sql = "Select id from usuario where nombre = ?";
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1,nombre);
