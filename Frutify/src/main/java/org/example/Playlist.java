@@ -62,9 +62,8 @@ public class Playlist {
 		if (cancions.isEmpty()) {
 			return null; // Si la lista está vacía, retorna null
 		}
-		Random random = new Random();
-		int indiceAleatorio = random.nextInt(cancions.size());
-		return cancions.get(indiceAleatorio);
+		Collections.shuffle(cancions);
+		return cancions.get(0);
 	}
 
 
