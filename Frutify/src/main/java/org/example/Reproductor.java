@@ -17,9 +17,9 @@ import java.util.List;
  */
 public class Reproductor {
 	private Player player;
-	private Cancion cancion;
-	private List<String> listaCancion;
-	private int indice;
+	public Cancion cancion;
+	public List<String> listaCancion;
+	public int indice;
 	private boolean isPaused;
 
 	/**
@@ -27,41 +27,20 @@ public class Reproductor {
 	 * Si no hay ninguna canción para reproducir, este método no hace nada.
 	 */
 	public void iniciarCancion() {
-		// TODO - implement Reproductor.iniciarCancion
-		if (cancion != null){
-			if (indice < listaCancion.size()) {
-				cancion(listaCancion.get(indice));
-			}
+		if (cancion != null && indice < listaCancion.size()) {
+			reproducirCancionActual();
+		} else {
+			throw new UnsupportedOperationException("No hay canciones para reproducir o el índice está fuera de límites.");
 		}
-		throw new UnsupportedOperationException();
-	}
-
-
-
-	/**
-	 * Salta a la siguiente canción en la lista de reproducción.
-	 * Si la canción actual es la última, este método no hace nada.
-	 */
-	public void saltarCancion() {
-		// TODO - implement Reproductor.saltarCancion
-		if(cancion != null){
-			if (indice < listaCancion.size() - 1) {
-				indice++;
-				cancion(listaCancion.get(indice));
-			}
-		}
-		throw new UnsupportedOperationException();
 	}
 	/**
-	 * Reproduce la canción especificada desde la ruta de archivo dada.
-	 * Este método se ejecuta en un hilo separado para permitir la reproducción asíncrona.
-	 *
-	 * @param s la ruta del archivo de la canción que se va a reproducir
+	 * Método privado para reproducir la canción actual desde la lista de reproducción.
 	 */
-	private void cancion(String s) {
+	private void reproducirCancionActual() {
+		String rutaCancion = listaCancion.get(indice);
 		try {
-			FileInputStream fileInputStream = new FileInputStream(s);
-			//cancion = new cancion(fileInputStream);
+			FileInputStream fileInputStream = new FileInputStream(rutaCancion);
+			//cancion = new Cancion(fileInputStream);
 			new Thread(() -> {
 				try {
 					player.play();
@@ -74,28 +53,43 @@ public class Reproductor {
 		}
 	}
 
+
+	/**
+	 * Salta a la siguiente canción en la lista de reproducción.
+	 * Si la canción actual es la última, este método no hace nada.
+	 */
+	public void saltarCancion() {
+		if (cancion != null && indice < listaCancion.size() - 1) {
+			indice++;
+			reproducirCancionActual();
+		} else {
+			throw new UnsupportedOperationException("No se puede saltar la canción.");
+		}
+	}
+
 	/**
 	 * Pausa la canción que se está reproduciendo actualmente.
 	 * Si no hay ninguna canción reproduciéndose, este método no hace nada.
 	 */
 	public void pausarCancion() {
-		// TODO - implement Reproductor.pausarCancion
-		if(cancion != null ){
+		if (cancion != null) {
 			isPaused = true;
 			//cancion.close();
+		} else {
+			throw new UnsupportedOperationException("No hay canción en reproducción para pausar.");
 		}
-		throw new UnsupportedOperationException();
 	}
 	/**
 	 * Reanuda la reproducción de la canción que está pausada actualmente.
 	 * Si no hay ninguna canción en pausa o el índice está fuera de límites, este método no hace nada.
 	 */
 	public void ReanudadCancion(){
-		if (isPaused && indice< listaCancion.size()) {
+		if (isPaused && indice < listaCancion.size()) {
 			isPaused = false;
-			cancion(listaCancion.get(indice));
+			reproducirCancionActual();
+		} else {
+			throw new UnsupportedOperationException("No hay canción en pausa o el índice está fuera de límites.");
 		}
-		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -103,14 +97,12 @@ public class Reproductor {
 	 * Si la canción actual es la primera, este método no hace nada.
 	 */
 	public void cancionAnterior() {
-		// TODO - implement Reproductor.cancionAnterior
-		if (cancion != null){
-			if (indice > 0) {
-				indice--;
-				cancion(listaCancion.get(indice));
-			}
+		if (cancion != null && indice > 0) {
+			indice--;
+			reproducirCancionActual();
+		} else {
+			throw new UnsupportedOperationException("No se puede retroceder a la canción anterior.");
 		}
-		throw new UnsupportedOperationException();
 	}
 
 }
