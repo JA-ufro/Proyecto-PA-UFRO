@@ -40,7 +40,6 @@ public class Reproductor {
 		String rutaCancion = listaCancion.get(indice);
 		try {
 			FileInputStream fileInputStream = new FileInputStream(rutaCancion);
-			//cancion = new Cancion(fileInputStream);
 			new Thread(() -> {
 				try {
 					player.play();
