@@ -90,7 +90,7 @@ public class Database {
         String sql = "Insert into playlist (nombre, usuario) values (?,?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)){
             int usuario_id = getUsuarioID(usuario.getNombre());
-            if(usuario_id == -1){
+            if(usuario_id != -1){
                 statement.setString(1,nombre);
                 statement.setInt(2,usuario_id);
                 statement.executeUpdate();
@@ -110,7 +110,7 @@ public class Database {
      * @return El ID del usuario si se encuentra; {@code -1} si no se encuentra o si ocurre un error.
      * @throws SQLException si ocurre un error al intentar recuperar el ID del usuario.
      */
-    private int getUsuarioID(String nombre){
+    public int getUsuarioID(String nombre){
         String sql = "Select id from usuario where nombre = ?";
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1,nombre);
