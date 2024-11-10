@@ -73,7 +73,6 @@ public class Reproductor {
 	public void pausarCancion() {
 		if (cancion != null) {
 			isPaused = true;
-			//cancion.close();
 		} else {
 			throw new UnsupportedOperationException("No hay canción en reproducción para pausar.");
 		}
