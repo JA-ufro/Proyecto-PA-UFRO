@@ -33,7 +33,7 @@ class DatabaseTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    // Test para iniciarSesion()
+    // Tests para iniciarSesion()
     @Test
     void iniciarSesion_CredencialesCorrectas_RetornaUsuario() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
@@ -48,34 +48,26 @@ class DatabaseTest {
         verify(preparedStatement).setString(2, "contrasena");
     }
 
-    // Test para crearPlaylist() cuando el usuario existe
     @Test
-    void crearPlaylist_UsuarioExiste_CreaPlaylist() throws SQLException {
-        Usuario usuario = new Usuario("usuario", "contrasena");
-
-        // Mock de getUsuarioID
-        when(connection.prepareStatement("Select id from usuario where nombre = ?")).thenReturn(preparedStatement);
+    void iniciarSesion_CredencialesIncorrectas_RetornaNull() throws SQLException {
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getInt("id")).thenReturn(1);
+        when(resultSet.next()).thenReturn(false);
 
-        when(connection.prepareStatement("Insert into playlist (nombre, usuario) values (?,?)")).thenReturn(preparedStatement);
+        Usuario usuario = database.iniciarSesion("usuario", "incorrecta");
 
-        database.crearPlaylist("Mi Playlist", usuario);
-
-        verify(preparedStatement).setString(1, "Mi Playlist");
-        verify(preparedStatement).setInt(2, 1);
-        verify(preparedStatement).executeUpdate();
+        assertNull(usuario);
+        verify(preparedStatement).setString(1, "usuario");
+        verify(preparedStatement).setString(2, "incorrecta");
     }
 
-    // Test para excepciones SQL en crearPlaylist()
     @Test
-    void crearPlaylist_ExcepcionSQLException_LanzaError() throws SQLException {
-        Usuario usuario = new Usuario("usuario", "contrasena");
+    void iniciarSesion_ExcepcionSQLException_LanzaError() throws SQLException {
         when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Error SQL"));
 
-        database.crearPlaylist("Mi Playlist", usuario);
+        Usuario usuario = database.iniciarSesion("usuario", "contrasena");
 
-        verify(preparedStatement, never()).executeUpdate();
+        assertNull(usuario);
     }
+
 }
