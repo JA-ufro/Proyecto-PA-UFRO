@@ -1,17 +1,87 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import java.sql.SQLException;
+import java.util.Scanner;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+/**
+ * Clase principal para ejecutar el programa que utiliza las clases Database, Playlist, Usuario y Reproductor.
+ * Permite realizar operaciones como iniciar sesión, crear playlists, agregar canciones y reproducirlas.
+ *
+ * @author JA-Ufro
+ */
+public class Main {
+
+    public static void main(String[] args) throws SQLException {
+        Database database = new Database();
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Conectando a la base de datos...");
+        database.getConnection();
+
+        Usuario usuarioActual = null;
+        while (usuarioActual == null) {
+            System.out.print("Ingrese su nombre de usuario: ");
+            String nombreUsuario = scanner.nextLine();
+            System.out.print("Ingrese su contraseña: ");
+            String contrasena = scanner.nextLine();
+
+            usuarioActual = database.iniciarSesion(nombreUsuario, contrasena);
+            if (usuarioActual == null) {
+                System.out.println("Usuario o contraseña incorrectos. Intente nuevamente.");
+            }
         }
+
+        System.out.println("Bienvenido, " + usuarioActual.getNombre() + "!");
+
+        Playlist playlist = new Playlist();
+        Reproductor fileChooser = new Reproductor();
+
+        boolean salir = false;
+        while (!salir) {
+            System.out.println("\nSeleccione una opción:");
+            System.out.println("1. Crear nueva playlist");
+            System.out.println("2. Ordenar playlist alfabéticamente");
+            System.out.println("3. Agregar canciones a la playlist desde archivos");
+            System.out.println("4. Mostrar playlist");
+            System.out.println("5. Reproducir playlist");
+            System.out.println("6. Obtener canción aleatoria");
+            System.out.println("7. Salir");
+
+            System.out.print("Opción: ");
+            int opcion = scanner.nextInt();
+            scanner.nextLine(); // Consumir el salto de línea
+
+            switch (opcion) {
+                case 1 -> {
+                    System.out.print("Ingrese el nombre de la nueva playlist: ");
+                    String nombrePlaylist = scanner.nextLine();
+                    database.crearPlaylist(nombrePlaylist, usuarioActual);
+                    playlist.setNombre(nombrePlaylist);
+                }
+                case 2 -> {
+                    playlist.ordenarAlfabeticamente();
+                    System.out.println("Playlist ordenada alfabéticamente.");
+                }
+                case 3 -> fileChooser.agregarArchivoAPlaylist();
+                case 4 -> fileChooser.mostrarPlaylist();
+                case 5 -> fileChooser.reproducirPlaylist();
+                case 6 -> {
+                    Cancion cancionAleatoria = playlist.obtenerCancionAleatoria();
+                    if (cancionAleatoria != null) {
+                        System.out.println("Canción aleatoria: " + cancionAleatoria.getNombre());
+                    } else {
+                        System.out.println("La playlist está vacía.");
+                    }
+                }
+                case 7 -> {
+                    salir = true;
+                    System.out.println("Saliendo del programa. Hasta luego!");
+                }
+                default -> System.out.println("Opción no válida. Intente nuevamente.");
+            }
+        }
+
+        database.desconectar();
+        scanner.close();
     }
 }
