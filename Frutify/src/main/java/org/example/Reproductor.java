@@ -8,23 +8,75 @@ import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+/**
+ * Clase Reproductor que implementa un reproductor MP3 con funcionalidades de manejo de playlist, reproducción,
+ * pausa, eliminación de canciones, y control de progreso en la reproducción.
+ * Utiliza la biblioteca {@code javazoom.jl.player.advanced.AdvancedPlayer} para la reproducción de archivos MP3.
+ *
+ * @author EstebanCancino
+ */
 public class Reproductor {
 
-	protected List<File> playlist = new ArrayList<>();
+	/**
+	 * Lista que contiene los archivos MP3 en la playlist.
+	 */
+	private List<File> playlist = new ArrayList<>();
+
+	/**
+	 * Objeto para la reproducción de archivos MP3.
+	 */
 	private AdvancedPlayer player;
+
+	/**
+	 * Hilo dedicado a la reproducción de la canción actual.
+	 */
 	private Thread playThread;
-	protected boolean isPaused = false;
-	private int pausaFrame = 0; // Posición de pausa en frames
-	protected File currentSong; // Canción actual
-	private final Object lock = new Object(); // Bloqueo para pausa/reanudar
-	private Timer progressTimer; // Temporizador para actualizar la barra de progreso
+
+	/**
+	 * Bandera para indicar si la reproducción está pausada.
+	 */
+	private boolean isPaused = false;
+
+	/**
+	 * Posición en frames en la que se pausó la reproducción.
+	 */
+	private int pausaFrame = 0;
+
+	/**
+	 * Archivo MP3 que se está reproduciendo actualmente.
+	 */
+	private File currentSong;
+
+	/**
+	 * Objeto para sincronizar el control de pausa y reanudación.
+	 */
+	private final Object lock = new Object();
+
+	/**
+	 * Temporizador para actualizar la barra de progreso durante la reproducción.
+	 */
+	private Timer progressTimer;
+
+	/**
+	 * Barra deslizante que muestra el progreso de la canción.
+	 */
 	private JSlider progressSlider;
+
+	/**
+	 * Etiqueta que muestra el tiempo restante de la canción actual.
+	 */
 	private JLabel timeRemainingLabel;
 
+	/**
+	 * Constructor de la clase Reproductor. Inicializa la interfaz de usuario.
+	 */
 	public Reproductor() {
 		initializeUI();
 	}
 
+	/**
+	 * Inicializa la interfaz gráfica de usuario para el reproductor MP3.
+	 */
 	private void initializeUI() {
 		JFrame frame = new JFrame("Reproductor MP3");
 		frame.setSize(600, 300);
@@ -69,6 +121,9 @@ public class Reproductor {
 		frame.setVisible(true);
 	}
 
+	/**
+	 * Agrega un archivo MP3 seleccionado por el usuario a la playlist.
+	 */
 	public void agregarArchivoAPlaylist() {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
@@ -91,6 +146,9 @@ public class Reproductor {
 		}
 	}
 
+	/**
+	 * Muestra los archivos MP3 en la playlist en un cuadro de diálogo.
+	 */
 	public void mostrarPlaylist() {
 		StringBuilder sb = new StringBuilder("Playlist:\n");
 		if (playlist.isEmpty()) {
@@ -103,6 +161,9 @@ public class Reproductor {
 		JOptionPane.showMessageDialog(null, sb.toString());
 	}
 
+	/**
+	 * Reproduce la playlist, comenzando desde la primera canción de la lista.
+	 */
 	public void reproducirPlaylist() {
 		if (playlist.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "La playlist está vacía.");
@@ -116,6 +177,11 @@ public class Reproductor {
 		playThread.start();
 	}
 
+	/**
+	 * Reproduce una canción específica.
+	 *
+	 * @param cancion Archivo MP3 a reproducir.
+	 */
 	private void reproducirCancion(File cancion) {
 		try (FileInputStream fileInputStream = new FileInputStream(cancion)) {
 			BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
@@ -134,6 +200,11 @@ public class Reproductor {
 		}
 	}
 
+	/**
+	 * Actualiza la barra de progreso y el tiempo restante durante la reproducción.
+	 *
+	 * @param duration Duración total de la canción en segundos.
+	 */
 	private void actualizarProgreso(int duration) {
 		if (!isPaused && progressSlider.getValue() < duration) {
 			int currentValue = progressSlider.getValue() + 1;
@@ -144,17 +215,31 @@ public class Reproductor {
 		}
 	}
 
+	/**
+	 * Formatea el tiempo en segundos a un formato mm:ss.
+	 *
+	 * @param segundos Tiempo en segundos.
+	 * @return Tiempo formateado como cadena en el formato mm:ss.
+	 */
 	private String formatearTiempo(int segundos) {
 		int minutos = segundos / 60;
 		int segRestantes = segundos % 60;
 		return String.format("%02d:%02d", minutos, segRestantes);
 	}
 
+	/**
+	 * Calcula la duración de un archivo MP3 en segundos.
+	 *
+	 * @param file Archivo MP3.
+	 * @return Duración en segundos (se utiliza un valor fijo como ejemplo).
+	 */
 	private int calcularDuracionEnSegundos(File file) {
-		// Implementar lógica para calcular duración (puede necesitar una biblioteca externa)
 		return 240; // Duración fija como ejemplo
 	}
 
+	/**
+	 * Pausa o reanuda la reproducción actual según el estado.
+	 */
 	public void pausarReanudar() {
 		synchronized (lock) {
 			if (isPaused) {
@@ -168,6 +253,9 @@ public class Reproductor {
 		}
 	}
 
+	/**
+	 * Elimina la primera canción de la playlist.
+	 */
 	public void eliminarCancion() {
 		if (playlist.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "La playlist está vacía.");
