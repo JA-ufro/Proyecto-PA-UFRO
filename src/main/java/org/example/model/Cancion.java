@@ -40,6 +40,15 @@ public class Cancion {
 
 	/** Fecha de lanzamiento de la canción. */
 	private String fechaLanzamiento;
+	private String rutaArchivo;
+
+	public String getRutaArchivo() {
+		return rutaArchivo;
+	}
+
+	public void setRutaArchivo(String rutaArchivo) {
+		this.rutaArchivo = rutaArchivo;
+	}
 
 	/**
 	 * Crea una instancia de {@code Cancion} a partir de un archivo MP3, extrayendo
@@ -73,6 +82,10 @@ public class Cancion {
 	 */
 	public String getNombre() {
 		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
 	/**

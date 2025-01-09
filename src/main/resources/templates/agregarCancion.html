@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Agregar Canción</title>
+</head>
+<body>
+<h1>Agregar Canción a Playlist</h1>
+<form th:action="@{/playlist/agregarCancion}" method="post">
+    <input type="hidden" th:name="playlistId" th:value="${playlist.id}" />
+    <label for="nombreCancion">Nombre de la Canción:</label>
+    <input type="text" id="nombreCancion" name="nombreCancion" required />
+    <br />
+    <label for="rutaArchivo">Ruta del Archivo:</label>
+    <input type="text" id="rutaArchivo" name="rutaArchivo" required />
+    <br />
+    <button type="submit">Agregar</button>
+</form>
+</body>
+</html>

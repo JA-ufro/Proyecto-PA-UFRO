@@ -41,14 +41,14 @@ class PlaylistTest {
         System.out.println("Probando obtenerCancionAleatoria con canciones disponibles en la playlist...");
         Cancion cancionAleatoria = playlist.obtenerCancionAleatoria();
         assertNotNull(cancionAleatoria, "La canción aleatoria no debe ser null.");
-        assertTrue(playlist.getCancions().contains(cancionAleatoria), "La canción aleatoria debe estar en la playlist.");
+        assertTrue(playlist.getCanciones().contains(cancionAleatoria), "La canción aleatoria debe estar en la playlist.");
         System.out.println("Canción aleatoria obtenida: " + cancionAleatoria.getNombre());
     }
 
     @Test
     public void testObtenerCancionAleatoriaListaVacia() {
         System.out.println("Probando obtenerCancionAleatoria con una playlist vacía...");
-        playlist.getCancions().clear();
+        playlist.getCanciones().clear();
         Cancion cancionAleatoria = playlist.obtenerCancionAleatoria();
         assertNull(cancionAleatoria, "La canción aleatoria debe ser null si la playlist está vacía.");
         System.out.println("Resultado esperado: null");
@@ -59,7 +59,7 @@ class PlaylistTest {
         System.out.println("Probando ordenarAlfabeticamente...");
         playlist.ordenarAlfabeticamente();
 
-        List<Cancion> cancionesOrdenadas = playlist.getCancions();
+        List<Cancion> cancionesOrdenadas = playlist.getCanciones();
 
         assertEquals("Amanecer", cancionesOrdenadas.get(0).getNombre(), "La primera canción debe ser 'Amanecer'.");
         assertEquals("Brisas", cancionesOrdenadas.get(1).getNombre(), "La segunda canción debe ser 'Brisas'.");

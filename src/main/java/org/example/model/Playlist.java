@@ -17,17 +17,18 @@ public class Playlist {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nombre;
+	private String rutaArchivo;
 	@ManyToMany
 	@JoinTable(
 			name = "cancion_has_playlist", // Nombre de la tabla intermedia
 			joinColumns = @JoinColumn(name = "playlist_id"), // Columna de la playlist
 			inverseJoinColumns = @JoinColumn(name = "cancion_id") // Columna de la canción
 	)
-	private List<Cancion> canciones;
+	private List<Cancion> canciones = new ArrayList<>();
 
 	public Playlist(String nombre, Usuario usuario) {
+		this.id = null;
 		this.nombre = nombre;
-		this.canciones = new ArrayList<>();
 	}
 
 	public Playlist() {
@@ -64,7 +65,7 @@ public class Playlist {
 	 *
 	 * @return La lista de canciones.
 	 */
-	public List<Cancion> getCancions() {
+	public List<Cancion> getCanciones() {
 		return canciones;
 	}
 
@@ -74,5 +75,19 @@ public class Playlist {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public String getRutaArchivo() {
+		return rutaArchivo;
+	}
+
+	public void setRutaArchivo(String rutaArchivo) {
+		this.rutaArchivo = rutaArchivo;
+	}
+	public List<Cancion> getCancions() {
+		return canciones;
+	}
+
+	public void setCancions(List<Cancion> cancions) {
+		this.canciones = cancions;
 	}
 }

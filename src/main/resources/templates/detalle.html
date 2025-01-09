@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Detalles de Playlist</title>
+</head>
+<body>
+<h1>Detalles de la Playlist: <span th:text="${playlist.nombre}"></span></h1>
+
+<h2>Canciones</h2>
+<table>
+  <thead>
+  <tr>
+    <th>Nombre</th>
+    <th>Archivo</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="cancion : ${canciones}">
+    <td th:text="${cancion.nombre}"></td>
+    <td>
+      <a th:href="@{/files/{ruta}(ruta=${cancion.rutaArchivo})}" th:text="${cancion.rutaArchivo}"></a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<a href="/playlist">Volver a la lista de playlists</a>
+</body>
+</html>
+

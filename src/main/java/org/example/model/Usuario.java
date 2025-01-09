@@ -34,7 +34,8 @@ public class Usuario {
 	public Usuario() {
 	}
 
-	public Usuario(String nombre, String contrasena) {
+	public Usuario(Long id, String nombre, String contrasena) {
+		this.id = id;
 		this.nombre = nombre;
 		this.contrasena = contrasena;
 	}
@@ -44,10 +45,13 @@ public class Usuario {
 	 *
 	 * @return El nombre del usuario.
 	 */
+
 	public String getNombre() {
 		return nombre;
 	}
-
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 	/**
 	 * Devuelve la contraseña del usuario.
 	 *
@@ -55,6 +59,9 @@ public class Usuario {
 	 */
 	public String getContrasena() {
 		return contrasena;
+	}
+	public void setContrasena(String contrasena) {
+		this.contrasena = contrasena;
 	}
 	public Long getId() {
 		return id;

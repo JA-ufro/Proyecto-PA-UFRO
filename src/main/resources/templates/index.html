@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Página de Inicio</title>
+</head>
+<body>
+<h1>Bienvenido, <span th:text="${usuario.nombre}"></span>!</h1>
+<h2>Funciones disponibles:</h2>
+<ul>
+  <li><a th:href="@{/playlist}">Ver mis playlists</a></li>
+  <li><a th:href="@{/playlist/crear}">Crear nueva playlist</a></li>
+  <li><a th:href="@{/playlist/ordenar}">Ordenar playlists</a></li>
+  <li><a th:href="@{/playlist/agregarCancion}" >Agregar canción a la playlist</a></li>
+  <li><a th:href="@{/playlist/reproducir}" >Reproducir playlist</a></li>
+</ul>
+</body>
+</html>
+

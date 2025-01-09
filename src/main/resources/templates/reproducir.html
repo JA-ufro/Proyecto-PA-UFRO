@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Reproducir Playlist</title>
+</head>
+<body>
+<h1>Reproduciendo: <span th:text="${playlist.nombre}"></span></h1>
+<ul>
+    <li th:each="cancion : ${playlist.cancions}">
+        <span th:text="${cancion.nombre}"></span>
+        <audio controls>
+            <source th:src="@{'/' + ${cancion.rutaArchivo}}" type="audio/mpeg">
+            Tu navegador no soporta el elemento de audio.
+        </audio>
+    </li>
+</ul>
+
+<a href="/playlist/index">Volver</a>
+</body>
+</html>

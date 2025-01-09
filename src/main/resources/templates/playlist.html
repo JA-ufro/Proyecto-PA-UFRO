@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Playlists</title>
+</head>
+<body>
+<h1>Playlists</h1>
+<form th:action="@{/playlist/crear}" method="post">
+  <input type="text" name="nombre" placeholder="Nueva playlist" required>
+  <input type="hidden" name="usuarioId" th:value="${usuarioId}">
+  <button type="submit">Crear Playlist</button>
+</form>
+<ul>
+  <li th:each="playlist : ${playlists}">
+    <span th:text="${playlist}"></span>
+    <form th:action="@{/playlist/{id}/eliminar(id=${playlist.id})}" method="post" style="display:inline;">
+      <input type="hidden" name="usuarioId" th:value="${usuarioId}">
+      <button type="submit">Eliminar</button>
+    </form>
+  </li>
+</ul>
+</body>
+</html>
